@@ -96,7 +96,7 @@ const closeModalAndRedirect = () => {
 
 <template>
   <div class="recommendation">
-    <h1>Recommande un livre qui t’a marqué : un titre, un avis, et c’est partagé !</h1>
+    <h1>Recommande un livre qui t'a marqué : un titre, un avis, et c'est partagé !</h1>
     <div class="recommendation-content">
       <form @submit.prevent="handleSubmit" class="recommendation-form">
         <div class="form-group">
@@ -175,7 +175,6 @@ const closeModalAndRedirect = () => {
     <dialog v-if="showModal" open class="confirmation-modal">
       <div>
         <h2>Merci pour ta recommandation !</h2>
-        <p>Elle sera visible après validation.</p>
         <button @click="closeModalAndRedirect" class="submit-button">Retour à l'accueil</button>
       </div>
     </dialog>
@@ -194,9 +193,13 @@ const closeModalAndRedirect = () => {
 }
 
 h1 {
-  color: #2c3e50;
-  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #1a1a1a;
   text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  font-family: 'Great Vibes', cursive;
+  font-weight: 400;
+  margin-bottom: 2rem;
 }
 
 .recommendation-content {
@@ -309,5 +312,14 @@ textarea {
 .confirmation-modal h2 {
   margin-bottom: 1rem;
   color: #2e8b57;
+}
+
+@media (max-width: 600px) {
+  .recommendation {
+    padding: 1rem;
+  }
+}
+  .h1 {
+    margin-bottom: 1rem;
 }
 </style>
