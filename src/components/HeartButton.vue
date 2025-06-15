@@ -14,6 +14,7 @@ const emit = defineEmits<{
 const isHovered = ref(false)
 const isLiked = ref(false)
 const isAnimating = ref(false)
+const localLikes = ref(props.likes)
 
 const handleClick = async () => {
   if (isAnimating.value) return
@@ -22,17 +23,12 @@ const handleClick = async () => {
   isLiked.value = !isLiked.value
 
   try {
-    const newLikes = isLiked.value ? props.likes + 1 : props.likes - 1
-    const { error } = await supabase
-      .from('recommandations')
-      .update({ likes: newLikes })
-      .eq('id', props.bookId)
-
-    if (error) throw error
+    const newLikes = isLiked.value ? localLikes.value + 1 : localLikes.value - 1
+    await supabase.from('recommandations').update({ likes: newLikes }).eq('id', props.bookId)
+    localLikes.value = newLikes
     emit('update:likes', newLikes)
-  } catch (error) {
-    console.error('Erreur lors de la mise à jour des likes:', error)
-    isLiked.value = !isLiked.value 
+  } catch {
+    isLiked.value = !isLiked.value
   } finally {
     isAnimating.value = false
   }
