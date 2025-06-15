@@ -204,6 +204,7 @@ h1 {
 
 .recommendation-content {
   padding: 1rem;
+  margin: 1rem 8rem;
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -317,9 +318,13 @@ textarea {
 @media (max-width: 600px) {
   .recommendation {
     padding: 1rem;
-  }
+
 }
   .h1 {
     margin-bottom: 1rem;
+}
+  .recommendation-content {
+    margin: 1rem 0;
+}
 }
 </style>
