@@ -32,7 +32,7 @@ const handleClick = async () => {
     emit('update:likes', newLikes)
   } catch (error) {
     console.error('Erreur lors de la mise à jour des likes:', error)
-    isLiked.value = !isLiked.value // Revert on error
+    isLiked.value = !isLiked.value 
   } finally {
     isAnimating.value = false
   }

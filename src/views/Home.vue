@@ -62,8 +62,6 @@ onMounted(() => {
   fetchRecommandations()
 })
 
-const title = ref('Bienvenue sur Booksy')
-
 const updateLikes = (bookId: number, newLikes: number) => {
   const book = recommandations.value.find((rec) => rec.id === bookId)
   if (book) {
@@ -74,22 +72,38 @@ const updateLikes = (bookId: number, newLikes: number) => {
 
 <template>
   <div class="home-view">
-    <h1>{{ title }}</h1>
+    <h1>Bienvenue sur <span class="title-h1">Booksy</span></h1>
     <div class="home-content">
-      <h1 class="home-text">📚 Recommandations</h1>
+      <div class="container-title">
+        <h2 class="title-h2">Un bon livre, ça se partage.</h2>
+        <span class="title-span">Explore les coups de cœur des autres — et ajoute le tien !</span>
+      </div>
+      <p class="title-text">
+        Ici, on partage les livres qui nous ont fait vibrer, réfléchir, pleurer ou rêver. Pas
+        d’algorithme, pas de pub, juste des recommandations authentiques d’êtres humains qui aiment
+        lire.
+      </p>
+      <div class="home-text-icone">
+        <img src="@/assets/icons/joyaux.svg" alt="home-icone" class="home-icone" />
+        <p class="home-text">Tu as un coup de cœur littéraire ? Propose-le !</p>
+      </div>
+      <div class="home-text-icone">
+        <img src="@/assets/icons/loupe.svg" alt="home-icone" class="home-icone" />
+        <p class="home-text">En quête d’inspiration ? Explore les lectures des autres.</p>
+      </div>
 
       <!-- État de chargement -->
-      <div v-if="loading" class="text-center py-4">
+      <div v-if="loading" class="text-center">
         <p class="text-lg">Chargement des recommandations...</p>
       </div>
 
       <!-- Message d'erreur -->
-      <div v-else-if="error" class="text-center py-4 text-red-600">
+      <div v-else-if="error" class="text-center">
         <p class="text-lg">Erreur : {{ error }}</p>
       </div>
 
       <!-- Aucune donnée -->
-      <div v-else-if="!recommandations.length" class="text-center py-4">
+      <div v-else-if="!recommandations.length" class="text-center">
         <p class="text-lg">Aucune recommandation disponible</p>
       </div>
 
@@ -128,7 +142,7 @@ const updateLikes = (bookId: number, newLikes: number) => {
 
 h1 {
   color: #2c3e50;
-  margin-bottom: 2rem;
+  margin-top: 1rem;
   font-size: 2.5rem;
   text-align: center;
   font-weight: 700;
@@ -139,12 +153,48 @@ h1 {
   padding: 1rem;
 }
 
-.home-text {
+.home-text-icone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.home-icone {
+  width: 2rem;
+  height: 2rem;
+}
+
+.container-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-h1 {
+  background: linear-gradient(135deg, #4682b4 0%, #2e8b57 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  font-weight: 700;
+}
+
+.title-h2 {
   font-size: 2rem;
   color: #1a1a1a;
-  margin-bottom: 2rem;
   text-align: center;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  font-family: 'Great Vibes', cursive;
+  font-weight: 400;
+}
+
+.title-span {
+  font-size: 1.2rem;
+  color: #1a1a1a;
+  margin-bottom: 2rem;
+  font-weight: 300;
+  font-style: italic;
 }
 
 .home-books {
@@ -152,6 +202,7 @@ h1 {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
   padding: 1rem;
+  margin-top: 1rem;
 }
 
 .book-container {
@@ -171,7 +222,7 @@ h1 {
 }
 
 .book-container:hover {
-  transform: translateY(-5px);
+  transform: translateY(-1px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 1);
 }
@@ -228,19 +279,8 @@ h1 {
 
 .text-center {
   text-align: center;
-}
-
-.py-4 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
-.text-lg {
-  font-size: 1.125rem;
-}
-
-.text-red-600 {
   color: #dc2626;
+  font-size: 2rem;
 }
 
 @media (max-width: 768px) {
