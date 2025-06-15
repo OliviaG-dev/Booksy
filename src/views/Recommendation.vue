@@ -9,14 +9,14 @@ defineOptions({
 
 const router = useRouter()
 
-const genres = ref<string[]>([])
+const genres = ref<{ id: number; name: string }[]>([])
 const genresLoading = ref(true)
 const genresError = ref('')
 
 const formData = ref({
   title: '',
   author: '',
-  genre: '',
+  gender: '',
   review: '',
   coverUrl: '',
 })
@@ -28,12 +28,12 @@ const errorMsg = ref('')
 onMounted(async () => {
   genresLoading.value = true
   genresError.value = ''
-  const { data, error } = await supabase.from('gender').select('name')
+  const { data, error } = await supabase.from('gender').select('id, name')
   if (error) {
     genresError.value = 'Erreur lors du chargement des genres : ' + error.message
     genres.value = []
   } else {
-    genres.value = ((data as { name: string }[]) || []).map((g) => g.name)
+    genres.value = (data as { id: number; name: string }[]) || []
   }
   genresLoading.value = false
 })
@@ -41,12 +41,38 @@ onMounted(async () => {
 const handleSubmit = async () => {
   isSubmitting.value = true
   errorMsg.value = ''
+
+  // Vérification côté front : genre obligatoire
+  if (!formData.value.gender) {
+    errorMsg.value = 'Le champ genre est obligatoire.'
+    isSubmitting.value = false
+    return
+  }
+
+  const genderId = Number(formData.value.gender)
+  if (isNaN(genderId)) {
+    errorMsg.value = 'Le genre sélectionné est invalide.'
+    isSubmitting.value = false
+    return
+  }
+
+  // Ajout du log pour debug
+  console.log({
+    title: formData.value.title,
+    author: formData.value.author,
+    avis: formData.value.review,
+    gender_id: genderId,
+    cover_url: formData.value.coverUrl,
+    published: false,
+    likes: 0,
+  })
+
   const { error } = await supabase.from('recommandations').insert([
     {
       title: formData.value.title,
       author: formData.value.author,
       avis: formData.value.review,
-      genre: formData.value.genre,
+      gender_id: genderId,
       cover_url: formData.value.coverUrl,
       published: false,
       likes: 0,
@@ -60,6 +86,8 @@ const handleSubmit = async () => {
   }
 }
 
+console.log(formData.value)
+
 const closeModalAndRedirect = () => {
   showModal.value = false
   router.push('/')
@@ -68,7 +96,7 @@ const closeModalAndRedirect = () => {
 
 <template>
   <div class="recommendation">
-    <h1>Recommandations</h1>
+    <h1>Recommande un livre qui t'a marqué : un titre, un avis, et c'est partagé !</h1>
     <div class="recommendation-content">
       <form @submit.prevent="handleSubmit" class="recommendation-form">
         <div class="form-group">
@@ -99,15 +127,15 @@ const closeModalAndRedirect = () => {
           <label for="genre">Genre</label>
           <select
             id="genre"
-            v-model="formData.genre"
+            v-model="formData.gender"
             required
             :disabled="isSubmitting || genresLoading"
           >
             <option value="" disabled>Sélectionnez un genre</option>
             <option v-if="genresLoading" disabled>Chargement...</option>
             <option v-else-if="genresError" disabled>{{ genresError }}</option>
-            <option v-else v-for="genre in genres" :key="genre" :value="genre">
-              {{ genre }}
+            <option v-else v-for="genre in genres" :key="genre.id" :value="genre.id">
+              {{ genre.name }}
             </option>
           </select>
         </div>
@@ -147,7 +175,6 @@ const closeModalAndRedirect = () => {
     <dialog v-if="showModal" open class="confirmation-modal">
       <div>
         <h2>Merci pour ta recommandation !</h2>
-        <p>Elle sera visible après validation.</p>
         <button @click="closeModalAndRedirect" class="submit-button">Retour à l'accueil</button>
       </div>
     </dialog>
@@ -166,13 +193,18 @@ const closeModalAndRedirect = () => {
 }
 
 h1 {
-  color: #2c3e50;
-  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #1a1a1a;
   text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  font-family: 'Great Vibes', cursive;
+  font-weight: 400;
+  margin-bottom: 2rem;
 }
 
 .recommendation-content {
   padding: 1rem;
+  margin: 1rem 8rem;
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -281,5 +313,18 @@ textarea {
 .confirmation-modal h2 {
   margin-bottom: 1rem;
   color: #2e8b57;
+}
+
+@media (max-width: 600px) {
+  .recommendation {
+    padding: 1rem;
+
+}
+  .h1 {
+    margin-bottom: 1rem;
+}
+  .recommendation-content {
+    margin: 1rem 0;
+}
 }
 </style>
