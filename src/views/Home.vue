@@ -2,6 +2,7 @@
 import { supabase } from '@/lib/supabase'
 import { ref, onMounted, computed, watch } from 'vue'
 import HeartButton from '@/components/HeartButton.vue'
+import Loader from '@/components/Loader.vue'
 
 defineOptions({
   name: 'HomeView',
@@ -41,7 +42,6 @@ const filteredRecommandations = computed(() => {
     ? recommandations.value.filter((rec) => rec.gender && rec.gender.name === selectedGenre.value)
     : recommandations.value
 
-  // Tri
   switch (sortOption.value) {
     case 'likes-asc':
       recs = [...recs].sort((a, b) => a.likes - b.likes)
@@ -114,29 +114,28 @@ const updateLikes = (bookId: number, newLikes: number) => {
 </script>
 
 <template>
-  <div class="home-view">
-    <h1>Bienvenue sur <span class="title-h1">Booksy</span></h1>
-    <div class="home-content">
-      <div class="container-title">
-        <h2 class="title-h2">Un bon livre, ça se partage.</h2>
-        <span class="title-span">Explore les coups de cœur des autres — et ajoute le tien !</span>
+  <div class="home_view">
+    <h1>Bienvenue sur <span class="title_h1">Booksy</span></h1>
+    <div class="home_content">
+      <div class="container_title">
+        <h2 class="title_h2">Un bon livre, ça se partage.</h2>
+        <span class="title_span">Explore les coups de cœur des autres — et ajoute le tien !</span>
       </div>
-      <p class="title-text">
+      <p class="title_text">
         Ici, on partage les livres qui nous ont fait vibrer, réfléchir, pleurer ou rêver. Pas
         d'algorithme, pas de pub, juste des recommandations authentiques d'êtres humains qui aiment
         lire.
       </p>
-      <div class="home-text-icone">
-        <img src="@/assets/icons/joyaux.svg" alt="home-icone" class="home-icone" />
-        <p class="home-text">Tu as un coup de cœur littéraire ? Propose-le !</p>
+      <div class="home_text_icone">
+        <img src="@/assets/icons/joyaux.svg" alt="home-icone" class="home_icone" />
+        <p class="home_text">Tu as un coup de cœur littéraire ? Propose-le !</p>
       </div>
-      <div class="home-text-icone">
-        <img src="@/assets/icons/loupe.svg" alt="home-icone" class="home-icone" />
-        <p class="home-text">En quête d'inspiration ? Explore les lectures des autres.</p>
+      <div class="home_text_icone">
+        <img src="@/assets/icons/loupe.svg" alt="home-icone" class="home_icone" />
+        <p class="home_text">En quête d'inspiration ? Explore les lectures des autres.</p>
       </div>
 
-      <!-- Filtre par genre -->
-      <div class="genre-filter">
+      <div class="genre_filter">
         <button :class="{ active: selectedGenre === null }" @click="selectedGenre = null">
           Tous
         </button>
@@ -149,8 +148,9 @@ const updateLikes = (bookId: number, newLikes: number) => {
           {{ genre }}
         </button>
       </div>
-      <!-- Filtre de tri -->
-      <div class="sort-filter">
+
+
+      <div class="sort_filter">
         <label for="sort-select">Trier par :</label>
         <select id="sort-select" v-model="sortOption">
           <option value="likes-desc">Likes décroissants</option>
@@ -160,46 +160,47 @@ const updateLikes = (bookId: number, newLikes: number) => {
         </select>
       </div>
 
-      <!-- État de chargement -->
-      <div v-if="loading" class="text-center">
-        <p class="text-lg">Chargement des recommandations...</p>
+      <div v-if="loading">
+        <Loader />
       </div>
 
-      <!-- Message d'erreur -->
-      <div v-else-if="error" class="text-center">
-        <p class="text-lg">Erreur : {{ error }}</p>
+
+
+      <div v-else-if="error" class="text_center">
+        <p class="text_lg">Erreur : {{ error }}</p>
       </div>
 
-      <!-- Aucune donnée -->
-      <div v-else-if="!filteredRecommandations.length" class="text-center">
-        <p class="text-lg">Aucune recommandation disponible</p>
+
+      <div v-else-if="!filteredRecommandations.length" class="text_center">
+        <p class="text_lg">Aucune recommandation disponible</p>
       </div>
 
-      <!-- Liste des recommandations -->
-      <div v-else class="home-books">
-        <div v-for="rec in paginatedRecommandations" :key="rec.id" class="book-container">
-          <div class="book-header">
-            <div class="book-gender-container">
-              <p class="book-gender">
+
+      <div v-else class="home_books">
+        <div v-for="rec in paginatedRecommandations" :key="rec.id" class="book_container">
+          <div class="book_header">
+            <div class="book_gender_container">
+              <p class="book_gender">
                 {{ rec.gender && rec.gender.name ? rec.gender.name : 'Inconnu' }}
               </p>
             </div>
-            <div class="likes-container">
+            <div class="likes_container">
               <HeartButton
                 :likes="rec.likes"
                 :book-id="rec.id"
                 @update:likes="(newLikes) => updateLikes(rec.id, newLikes)"
               />
-              <span class="book-likes">{{ rec.likes }}</span>
+              <span class="book_likes">{{ rec.likes }}</span>
             </div>
           </div>
-          <img :src="rec.cover_url" :alt="rec.title" class="book-image" />
-          <h2 class="book-title">{{ rec.title }}</h2>
-          <p class="book-author">par {{ rec.author }}</p>
-          <p class="book-avis">"{{ rec.avis }}"</p>
+          <img :src="rec.cover_url" :alt="rec.title" class="book_image" />
+          <h2 class="book_title">{{ rec.title }}</h2>
+          <p class="book_author">par {{ rec.author }}</p>
+          <p class="book_avis">"{{ rec.avis }}"</p>
         </div>
       </div>
-      <!-- Pagination -->
+
+
       <div class="pagination" v-if="totalPages > 1">
         <button :disabled="currentPage === 1" @click="currentPage--">Précédent</button>
         <span>{{ currentPage }} / {{ totalPages }}</span>
@@ -210,7 +211,7 @@ const updateLikes = (bookId: number, newLikes: number) => {
 </template>
 
 <style scoped>
-.home-view {
+.home_view {
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
@@ -227,29 +228,29 @@ h1 {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
-.home-content {
+.home_content {
   padding: 1rem;
 }
 
-.home-text-icone {
+.home_text_icone {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
 }
 
-.home-icone {
+.home_icone {
   width: 2rem;
   height: 2rem;
 }
 
-.container-title {
+.container_title {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.title-h1 {
+.title_h1 {
   background: linear-gradient(135deg, #4682b4 0%, #2e8b57 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -258,7 +259,7 @@ h1 {
   font-weight: 700;
 }
 
-.title-h2 {
+.title_h2 {
   font-size: 2rem;
   color: #1a1a1a;
   text-align: center;
@@ -267,7 +268,7 @@ h1 {
   font-weight: 400;
 }
 
-.title-span {
+.title_span {
   font-size: 1.2rem;
   color: #1a1a1a;
   margin-bottom: 2rem;
@@ -275,7 +276,7 @@ h1 {
   font-style: italic;
 }
 
-.home-books {
+.home_books {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
@@ -283,7 +284,7 @@ h1 {
   margin-top: 1rem;
 }
 
-.book-header {
+.book_header {
   width: 100%;
   padding: 0 1rem;
   display: flex;
@@ -292,7 +293,7 @@ h1 {
   margin-bottom: 1rem;
 }
 
-.book-container {
+.book_container {
   background: rgba(255, 255, 255, 0.95);
   border-radius: 12px;
   padding: 1.5rem;
@@ -308,13 +309,13 @@ h1 {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.book-container:hover {
+.book_container:hover {
   transform: translateY(-1px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 1);
 }
 
-.book-image {
+.book_image {
   width: 200px;
   height: 300px;
   object-fit: cover;
@@ -323,20 +324,20 @@ h1 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.book-title {
+.book_title {
   font-size: 1.25rem;
   font-weight: 600;
   color: #2c3e50;
   margin: 0.5rem 0;
 }
 
-.book-author {
+.book_author {
   color: #666;
   font-size: 1rem;
   margin: 0.25rem 0;
 }
 
-.book-gender-container {
+.book_gender_container {
   display: inline-block;
   padding: 0.25em 0.8em;
   background: #e6f4ea;
@@ -353,7 +354,7 @@ h1 {
   justify-content: center;
 }
 
-.book-gender {
+.book_gender {
   color: inherit;
   font-size: inherit;
   margin: 0;
@@ -361,7 +362,7 @@ h1 {
   text-align: center;
 }
 
-.book-avis {
+.book_avis {
   font-style: italic;
   color: #555;
   margin: 1rem 0;
@@ -369,31 +370,31 @@ h1 {
   font-size: 0.95rem;
 }
 
-.likes-container {
+.likes_container {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.book-likes {
+.book_likes {
   color: #e74c3c;
   font-weight: 600;
 }
 
-.text-center {
+.text_center {
   text-align: center;
   color: #dc2626;
   font-size: 2rem;
 }
 
-.genre-filter {
+.genre_filter {
   display: flex;
   gap: 0.5rem;
   margin: 1.5rem 0 0.5rem 0;
   flex-wrap: wrap;
   justify-content: center;
 }
-.genre-filter button {
+.genre_filter button {
   background: #e6f4ea;
   color: #217a4a;
   border: none;
@@ -405,24 +406,24 @@ h1 {
     background 0.2s,
     color 0.2s;
 }
-.genre-filter button.active,
-.genre-filter button:hover {
+.genre_filter button.active,
+.genre_filter button:hover {
   background: #217a4a;
   color: #fff;
 }
 
-.sort-filter {
+.sort_filter {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin: 1.5rem 0 0 0;
   justify-content: end;
 }
-.sort-filter label {
+.sort_filter label {
   font-weight: 600;
   color: #217a4a;
 }
-.sort-filter select {
+.sort_filter select {
   border-radius: 8px;
   border: 1px solid #e6f4ea;
   padding: 0.3em 1em;
@@ -433,36 +434,36 @@ h1 {
   cursor: pointer;
   transition: border 0.2s;
 }
-.sort-filter select:focus {
+.sort_filter select:focus {
   outline: none;
   border: 1.5px solid #217a4a;
 }
 
 @media (max-width: 768px) {
-  .title-span,
-  .title-text {
+  .title_span,
+  .title_text {
     margin: 1rem 0;
   }
 
-  .home-text-icone {
+  .home_text_icone {
     margin: 0.5rem 0;
   }
-  .genre-filter {
+  .genre_filter {
     margin: 2rem 0;
   }
-  .sort-filter {
+  .sort_filter {
     justify-content: center;
     margin-bottom: 1rem;
   }
-  .home-books {
+  .home_books {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem;
   }
-  .home-view {
+  .home_view {
     padding: 0;
   }
 
-  .book-image {
+  .book_image {
     width: 160px;
     height: 240px;
   }
