@@ -83,7 +83,7 @@ const closeModalAndRedirect = () => {
 
 <template>
   <div class="recommendation">
-    <h1>Recommande un livre : un <span class="gradient-text">titre</span>, un <span class="gradient-text">avis</span>, et c'est <span class="gradient-text">partagé</span> !</h1>
+    <h1>Recommande un livre : un <span class="gradient_text">titre</span>, un <span class="gradient_text">avis</span>, et c'est <span class="gradient_text">partagé</span> !</h1>
     <div class="recommendation_content">
       <form @submit.prevent="handleSubmit" class="recommendation_form">
         <div class="form_group">
@@ -196,7 +196,7 @@ h1 {
   animation: fadeIn 0.5s ease-out;
 }
 
-.gradient-text {
+.gradient_text {
   background: linear-gradient(135deg, #4682b4 0%, #2e8b57 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

@@ -177,9 +177,10 @@ const closeNav = () => {
   .header {
     flex-direction: column;
     align-items: stretch;
-    padding: 0.5rem 0.5rem;
+    padding: 0.5rem 1rem;
     gap: 0.5rem;
   }
+
   .header_container {
     width: 100%;
     flex-direction: row;
@@ -187,16 +188,19 @@ const closeNav = () => {
     align-items: center;
     gap: 0.5rem;
   }
+
   .header_logo {
     width: 36px;
     height: 36px;
   }
+
   .header_title {
     font-size: 1.3rem;
     margin-left: 0.5rem;
     margin-top: 0;
     text-align: left;
   }
+
   .nav_toggle {
     position: relative;
     width: 40px;
@@ -210,33 +214,41 @@ const closeNav = () => {
     cursor: pointer;
     z-index: 30;
   }
+
   .nav_toggle span {
     position: absolute;
     left: 6px;
     width: 28px;
-    height: 4px;
+    height: 3px;
     background: #4682b4;
     border-radius: 2px;
     transition: 0.3s;
   }
+
   .nav_toggle span:nth-child(1) {
     top: 12px;
   }
+
   .nav_toggle span:nth-child(2) {
     top: 18px;
   }
+
   .nav_toggle span:nth-child(3) {
     top: 24px;
   }
+
   .nav_toggle span.open:nth-child(1) {
     transform: translateY(6px) rotate(45deg);
   }
+
   .nav_toggle span.open:nth-child(2) {
     opacity: 0;
   }
+
   .nav_toggle span.open:nth-child(3) {
     transform: translateY(-6px) rotate(-45deg);
   }
+
   .nav {
     position: absolute;
     top: 100%;
@@ -244,7 +256,7 @@ const closeNav = () => {
     width: 100%;
     flex-direction: column;
     background: white;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     gap: 0;
     align-items: stretch;
     padding: 0.5rem 0;
@@ -252,22 +264,45 @@ const closeNav = () => {
     opacity: 0;
     pointer-events: none;
     transform: translateY(-10px);
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
   }
+
   .nav.nav_open {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
+    max-height: 200px;
   }
+
   .nav_link {
     width: 100%;
     text-align: center;
-    padding: 1rem 0;
+    padding: 0.75rem 0;
     font-size: 1.1rem;
     border-radius: 0;
     border-bottom: 1px solid #e4e8f0;
+    transition: background-color 0.3s ease;
   }
+
   .nav_link:last-child {
     border-bottom: none;
+  }
+
+  .nav_link:hover {
+    background-color: #f8fafc;
+  }
+
+  .nav_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(2px);
+    z-index: 20;
   }
 }
 </style>
