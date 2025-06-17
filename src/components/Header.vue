@@ -1,10 +1,10 @@
 <template>
   <header class="header">
-    <div class="header-container">
-      <img src="/logo.jpg" alt="Booksy" class="header-logo" />
-      <h1 class="header-title">Booksy</h1>
+    <div class="header_container">
+      <img src="/logo.jpg" alt="Booksy" class="header_logo" />
+      <h1 class="header_title">Booksy</h1>
       <button
-        class="burger"
+        class="nav_toggle"
         @click="isNavOpen = !isNavOpen"
         aria-label="Ouvrir le menu"
         :aria-expanded="isNavOpen"
@@ -14,13 +14,13 @@
         <span :class="{ open: isNavOpen }"></span>
       </button>
     </div>
-    <nav class="nav" :class="{ 'nav-open': isNavOpen }">
-      <router-link to="/" class="nav-link" @click="closeNav">Accueil</router-link>
-      <router-link to="/recommendation" class="nav-link" @click="closeNav"
-        >Recommandations</router-link
+    <nav class="nav" :class="{ 'nav_open': isNavOpen }">
+      <router-link to="/" class="nav_link" @click="closeNav">Accueil</router-link>
+      <router-link to="/recommendation" class="nav_link" @click="closeNav"
+        >Recommander un livre</router-link
       >
     </nav>
-    <div v-if="isNavOpen" class="nav-overlay" @click="closeNav"></div>
+    <div v-if="isNavOpen" class="nav_overlay" @click="closeNav"></div>
   </header>
 </template>
 
@@ -51,19 +51,19 @@ const closeNav = () => {
   z-index: 10;
 }
 
-.header-container {
+.header_container {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.header-logo {
+.header_logo {
   width: 50px;
   height: 50px;
   border-radius: 50%;
 }
 
-.header-title {
+.header_title {
   font-size: 2rem;
   font-weight: 800;
   margin-left: 1rem;
@@ -75,7 +75,7 @@ const closeNav = () => {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.burger {
+.nav_toggle {
   display: none;
   flex-direction: column;
   justify-content: center;
@@ -88,7 +88,7 @@ const closeNav = () => {
   margin-left: 1rem;
   z-index: 30;
 }
-.burger span {
+.nav_toggle span {
   display: block;
   width: 28px;
   height: 4px;
@@ -97,13 +97,13 @@ const closeNav = () => {
   border-radius: 2px;
   transition: 0.3s;
 }
-.burger span.open:nth-child(1) {
+.nav_toggle span.open:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
-.burger span.open:nth-child(2) {
+.nav_toggle span.open:nth-child(2) {
   opacity: 0;
 }
-.burger span.open:nth-child(3) {
+.nav_toggle span.open:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
 
@@ -115,7 +115,7 @@ const closeNav = () => {
   transition: all 0.3s;
 }
 
-.nav-link {
+.nav_link {
   text-decoration: none;
   color: #2c3e50;
   font-weight: 500;
@@ -125,7 +125,7 @@ const closeNav = () => {
   position: relative;
 }
 
-.nav-link::after {
+.nav_link::after {
   content: '';
   position: absolute;
   bottom: -2px;
@@ -138,20 +138,20 @@ const closeNav = () => {
   transition: width 0.3s ease;
 }
 
-.nav-link:hover {
+.nav_link:hover {
   color: #4682b4;
 }
 
-.nav-link:hover::after {
+.nav_link:hover::after {
   width: 30%;
 }
 
-.nav-link.router-link-active {
+.nav_link.router-link-active {
   font-weight: 600;
   color: #2e8b57;
 }
 
-.nav-link.router-link-active::after {
+.nav_link.router-link-active::after {
   content: '';
   position: absolute;
   bottom: -2px;
@@ -163,7 +163,7 @@ const closeNav = () => {
   border-radius: 2px;
 }
 
-.nav-overlay {
+.nav_open {
   position: fixed;
   top: 0;
   left: 0;
@@ -177,27 +177,31 @@ const closeNav = () => {
   .header {
     flex-direction: column;
     align-items: stretch;
-    padding: 0.5rem 0.5rem;
+    padding: 0.5rem 1rem;
     gap: 0.5rem;
   }
-  .header-container {
+
+  .header_container {
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
   }
-  .header-logo {
+
+  .header_logo {
     width: 36px;
     height: 36px;
   }
-  .header-title {
+
+  .header_title {
     font-size: 1.3rem;
     margin-left: 0.5rem;
     margin-top: 0;
     text-align: left;
   }
-  .burger {
+
+  .nav_toggle {
     position: relative;
     width: 40px;
     height: 40px;
@@ -210,33 +214,41 @@ const closeNav = () => {
     cursor: pointer;
     z-index: 30;
   }
-  .burger span {
+
+  .nav_toggle span {
     position: absolute;
     left: 6px;
     width: 28px;
-    height: 4px;
+    height: 3px;
     background: #4682b4;
     border-radius: 2px;
     transition: 0.3s;
   }
-  .burger span:nth-child(1) {
+
+  .nav_toggle span:nth-child(1) {
     top: 12px;
   }
-  .burger span:nth-child(2) {
+
+  .nav_toggle span:nth-child(2) {
     top: 18px;
   }
-  .burger span:nth-child(3) {
+
+  .nav_toggle span:nth-child(3) {
     top: 24px;
   }
-  .burger span.open:nth-child(1) {
+
+  .nav_toggle span.open:nth-child(1) {
     transform: translateY(6px) rotate(45deg);
   }
-  .burger span.open:nth-child(2) {
+
+  .nav_toggle span.open:nth-child(2) {
     opacity: 0;
   }
-  .burger span.open:nth-child(3) {
+
+  .nav_toggle span.open:nth-child(3) {
     transform: translateY(-6px) rotate(-45deg);
   }
+
   .nav {
     position: absolute;
     top: 100%;
@@ -244,7 +256,7 @@ const closeNav = () => {
     width: 100%;
     flex-direction: column;
     background: white;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     gap: 0;
     align-items: stretch;
     padding: 0.5rem 0;
@@ -252,22 +264,45 @@ const closeNav = () => {
     opacity: 0;
     pointer-events: none;
     transform: translateY(-10px);
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
   }
-  .nav.nav-open {
+
+  .nav.nav_open {
     opacity: 1;
     pointer-events: auto;
     transform: translateY(0);
+    max-height: 200px;
   }
-  .nav-link {
+
+  .nav_link {
     width: 100%;
     text-align: center;
-    padding: 1rem 0;
+    padding: 0.75rem 0;
     font-size: 1.1rem;
     border-radius: 0;
     border-bottom: 1px solid #e4e8f0;
+    transition: background-color 0.3s ease;
   }
-  .nav-link:last-child {
+
+  .nav_link:last-child {
     border-bottom: none;
+  }
+
+  .nav_link:hover {
+    background-color: #f8fafc;
+  }
+
+  .nav_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(2px);
+    z-index: 20;
   }
 }
 </style>
